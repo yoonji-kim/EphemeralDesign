@@ -11,6 +11,8 @@ int max = 4;
 boolean pressed = false;
 
 int pressSensor = A1;
+int potentiometer = A0;
+int button = 5;
 
 void setup() 
 { 
@@ -22,7 +24,7 @@ void setup()
   delay(100);
 
   pressed = false;
-
+  //pinMode(button, OUTPUT);
   //movement = 1;
   
   //servoScrollControl();
@@ -30,12 +32,37 @@ void setup()
   //servoScrollOriginPosition();
 }
 
+void calibrationScrollMotor(Servo s, int buttonState) {
+  int angle = map(getPotentiometerValue(), 0, 1023, 0, 180);
+  Serial.print("angle = ");
+  Serial.println(angle);
+
+  int buttonPressed = buttonState;
+  if(buttonPressed) {
+    s.write(angle);
+  }
+  while(buttonPressed) {
+      buttonPressed = digitalRead(button);
+      delay(100);
+  }
+  s.write(90);
+  delay(10);
+}
+
+int getPotentiometerValue() {
+  int value = analogRead(potentiometer);
+  //Serial.print("potentiometer = ");
+  //Serial.println(value);
+  delay(10);
+  return value;
+}
+
 int getPressSensorValue() {
-  int pressValue = analogRead(pressSensor);
-  Serial.print("pressure =  ");
-  Serial.println(pressValue);
-  delay(200);
-  return pressValue;
+  int value = analogRead(pressSensor);
+  //Serial.print("pressure =  ");
+  //Serial.println(value);
+  delay(100);
+  return value;
 }
 
 void servoScrollOriginPosition() {
@@ -77,6 +104,9 @@ void servoPumpControl() {
 
 void loop() 
 {
+  int buttonPressed = (!digitalRead(button));
+  calibrationScrollMotor(servoScroll, buttonPressed);
+  
   if(getPressSensorValue() > 100) {
       pressed = true;
   } else {
