@@ -3,3 +3,6 @@ We designed Mystic Message, a display that prints ephemeral fog letters to provi
 
 ## Video
 [![Watch the video](https://drive.google.com/uc?export=view&id=1aI0_xfd7e9zU-rR7Q2e-wqUNFNeqvFJl)](https://youtu.be/wjaBWHQqlsI)
+
+## License
+MIT License
